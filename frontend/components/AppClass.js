@@ -6,11 +6,11 @@ import React from 'react'
 
 export default class AppClass extends React.Component {
   state = {
-    x: 2,
-    y: 2,
+    x: 1,
+    y: 1,
     steps: 0,
     email: '',
-    position: [1,1],
+    coordinates: [1,1],
     grid: [
       [0,0,0],
       [0,1,0],
@@ -18,39 +18,55 @@ export default class AppClass extends React.Component {
     ]
   }
 
-  componentDidMount() {
+  // changeGrid () => {
+  //   if (this.state.grid = 1) {
+  //   return 'B'
+  // } else {
+  //   return null
+  // }}
 
+  // componentDidMount() {
+
+  // }
+
+  // getCoordinates = (x, y) => {
+
+  //   console.log(`(${x}, ${y})`)
+  // }
+
+  moveUp = () => {
+    const newGrid = [...this.state.grid]
+    newGrid[this.state.y][this.state.x] = 0
+    newGrid[this.state.y - 1][this.state.x] = 1
+    this.setState({ ...this.state, grid: newGrid })
+    // console.log(this.state)
   }
 
-  getCoordinates = (x, y) => {
-    console.log(`(${x}, ${y})`)
+  moveDown = () => {
+    const newGrid = [...this.state.grid]
+    newGrid[this.state.y][this.state.x] = 0
+    newGrid[this.state.y + 1][this.state.x] = 1
+    this.setState({ ...this.state, grid: newGrid })
   }
 
-  // moveRight = (val) => {
-  //   this.setState({ ...this.state, position: [1,2] })
-  // }
+  moveRight = () => {
+    const newGrid = [...this.state.grid]
+    newGrid[this.state.y][this.state.x] = 0
+    newGrid[this.state.y][this.state.x + 1] = 1
+    this.setState({ ...this.state, grid: newGrid })
+  }
 
-  // moveLeft = (val) => {
-  //   this.setState({ ...this.state, position: [1,2] })
-  // }
-
-  // moveDown = (val) => {
-  //   this.setState({ ...this.state, position: [1,2] })
-  // }
-
-  // moveUp = (val) => {
-  //   this.setState({ ...this.state, position: [1,2] })
-  // }
-
-  // getPosition = (grid) => {
-  //   console.log(this.state.grid[0][0])
-  // }
+  moveLeft = () => {
+    const newGrid = [...this.state.grid]
+    newGrid[this.state.y][this.state.x] = 0
+    newGrid[this.state.y][this.state.x - 1] = 1
+    this.setState({ ...this.state, grid: newGrid })
+  }
 
 
   render() {
     console.log(this.state)
     const { className } = this.props
-    // const { x, y, steps, email } = this.state
     return (
       <div id="wrapper" className={className}>
         <div className="info">
@@ -73,7 +89,7 @@ export default class AppClass extends React.Component {
         </div>
         <div id="keypad">
           <button id="left">LEFT</button>
-          <button id="up">UP</button>
+          <button onClick={evt => this.moveUp} id="up">UP</button>
           <button id="right">RIGHT</button>
           <button id="down">DOWN</button>
           <button id="reset">reset</button>

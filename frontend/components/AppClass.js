@@ -1,37 +1,28 @@
+import axios from 'axios'
 import React from 'react'
-// import axios from 'axios'
 
-// const URL = 'http://localhost:9000/api/result'
+const URL = 'http://localhost:9000/api/result'
 
 
-const initialState = {
-  x: 1,
-  y: 1,
-  steps: 0,
-  email: '',
-  grid: [
-    [0, 0, 0],
-    [0, 1, 0],
-    [0, 0, 0]
-  ],
-  message: ''
-}
+
 
 export default class AppClass extends React.Component {
   constructor(props) {
     super(props)
-    this.state = initialState
+    this.state = {
+      x: 1,
+      y: 1,
+      steps: 0,
+      email: '',
+      grid: [
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+      ],
+      message: ''
+    }
   }
 
-  // const [x, y] = getCoordinates(grid)
-  // console.log(`(${x}, ${y})`) // (1, 2)
-
-  // componentDidMount() {
-  // }
-
-  // getCoordinates = (x, y) => {
-  //   console.log(`(${x}, ${y})`)
-  // }
 
   moveUp = () => {
     if(this.state.y > 0) {
@@ -127,7 +118,39 @@ export default class AppClass extends React.Component {
       message: ''
     })
   }
-//
+
+  changeInput = (evt) => {
+    this.setState({email: evt.target.value})
+  }
+
+  postEmail = () => {
+    const newPost = {
+      x: this.state.x+1,
+      y: this.state.y+1,
+      steps: this.state.steps,
+      email: this.state.email
+    }
+    axios.post(URL, newPost)
+    .then(res=> {
+      console.log(res)
+      this.setState({
+        message: res.data.message,
+        email: ''
+      })
+      
+    })
+    .catch(err=> {
+      console.log(err)
+      this.setState({
+        message: err.response.data.message
+      })
+    })
+  }
+
+  handleSubmit = evt => {
+    evt.preventDefault()
+    this.postEmail(this.state.values)
+  }
 
   render() {
     // console.log('props are', this.props)
@@ -160,9 +183,9 @@ export default class AppClass extends React.Component {
           <button onClick={this.moveDown} id="down">DOWN</button>
           <button onClick={this.reset} id="reset">reset</button>
         </div>
-        <form>
-          <input id="email" type="email" placeholder="type email"></input>
-          <input id="submit" type="submit"></input>
+        <form onSubmit={this.handleSubmit}>
+          <input id="email" type="email" placeholder="type email" onChange={this.changeInput} value={this.state.email}></input>
+          <input id="submit" type="submit" ></input>
         </form>
       </div>
     )
